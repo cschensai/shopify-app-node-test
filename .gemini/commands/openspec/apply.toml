@@ -1,4 +1,4 @@
-description = "Implement an approved OpenSpec change and keep tasks in sync."
+description = "实施一个已批准的 OpenSpec 变更并保持任务同步。"
 
 prompt = """
 <!-- OPENSPEC:START -->

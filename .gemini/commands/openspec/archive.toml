@@ -1,4 +1,4 @@
-description = "Archive a deployed OpenSpec change and update specs."
+description = "归档一个已部署的 OpenSpec 变更并更新规约。"
 
 prompt = """
 <!-- OPENSPEC:START -->

@@ -1,4 +1,4 @@
-description = "Scaffold a new OpenSpec change and validate strictly."
+description = "搭建一个新的 OpenSpec 变更并进行严格验证。"
 
 prompt = """
 <!-- OPENSPEC:START -->
