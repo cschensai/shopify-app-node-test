@@ -13,7 +13,7 @@
 ### 本地开发（推荐）
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 CLI 会自动：
@@ -27,7 +27,7 @@ CLI 会自动：
 ### 生产环境调试
 
 ```bash
-npm start
+pnpm start
 ```
 
 使用固定的生产域名 `https://crm.fridayparts.com`，适合调试已部署的服务。
@@ -42,8 +42,8 @@ npm start
 
 | 命令 | 配置文件 | 用途 | URL 行为 |
 |------|----------|------|----------|
-| `npm run dev` | `shopify.app.dev.toml` | **本地开发** | CLI 自动生成临时 Tunnel URL，并启动当前服务器监听 |
-| `npm start` | `shopify.app.toml` | **生产环境调试** | 使用固定生产域名 `https://crm.fridayparts.com` |
+| `pnpm run dev` | `shopify.app.dev.toml` | **本地开发** | CLI 自动生成临时 Tunnel URL，并启动当前服务器监听 |
+| `pnpm start` | `shopify.app.toml` | **生产环境调试** | 使用固定生产域名 `https://crm.fridayparts.com` |
 
 ### 配置文件说明
 
@@ -77,14 +77,14 @@ application_url = "https://crm.fridayparts.com"  # 固定生产域名
 
 **场景 1：本地开发新功能**
 ```bash
-npm run dev
+pnpm run dev
 # 等价于: shopify app dev --config dev
 ```
 CLI 会自动生成临时 Tunnel URL（如 `https://random-xyz.trycloudflare.com`），并启动本地 `index.js` 服务。
 
 **场景 2：调试生产环境**
 ```bash
-npm start
+pnpm start
 # 等价于: shopify app dev
 ```
 CLI 使用生产域名 `https://crm.fridayparts.com`，适合测试已部署的服务或排查生产环境问题。
@@ -261,25 +261,6 @@ Webhook URL 不能是：
 - 以 "internal" 结尾的 URL
 - 虚假域名（如 `www.example.com`）
 - Shopify 自己的域名
-
----
-
-## 手动启动（不使用 CLI）
-
-如需手动管理 Tunnel：
-
-```bash
-# 1. 启动 Cloudflare Tunnel
-cloudflared tunnel --url http://localhost:3333
-
-# 2. 更新 shopify.app.toml 中的 application_url 和 redirect_urls
-
-# 3. 同步配置到 Shopify
-shopify app deploy
-
-# 4. 启动服务
-node index.js
-```
 
 ---
 
