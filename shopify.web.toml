@@ -4,5 +4,4 @@ roles = ["frontend"]
 [commands]
 dev = "node index.js"
 build = ""
-
 port = 3333
