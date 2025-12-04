@@ -10,9 +10,10 @@
 
 ## 快速启动
 
+### 本地开发（推荐）
+
 ```bash
-# 一键启动（自动拉起 Cloudflare Tunnel + index.js）
-shopify app dev
+npm run dev
 ```
 
 CLI 会自动：
@@ -22,6 +23,83 @@ CLI 会自动：
 4. 配置反向代理
 
 按 `p` 键在浏览器中打开 Preview URL 进行授权。
+
+### 生产环境调试
+
+```bash
+npm start
+```
+
+使用固定的生产域名 `https://crm.fridayparts.com`，适合调试已部署的服务。
+
+---
+
+## 多环境配置
+
+本项目支持两种开发模式，分别对应不同的配置文件和使用场景。
+
+### 命令对比
+
+| 命令 | 配置文件 | 用途 | URL 行为 |
+|------|----------|------|----------|
+| `npm run dev` | `shopify.app.dev.toml` | **本地开发** | CLI 自动生成临时 Tunnel URL，并启动当前服务器监听 |
+| `npm start` | `shopify.app.toml` | **生产环境调试** | 使用固定生产域名 `https://crm.fridayparts.com` |
+
+### 配置文件说明
+
+#### `shopify.app.dev.toml` - 本地开发配置
+
+```toml
+application_url = "https://example.trycloudflare.com"  # 占位符，会被 CLI 自动更新
+[build]
+  automatically_update_urls_on_dev = true  # 启用自动 URL 更新
+```
+
+**特点**：
+- CLI 每次启动都生成新的 Tunnel URL
+- 自动更新 Partners Dashboard 中的应用配置
+- 无需手动管理 URL
+
+#### `shopify.app.toml` - 生产环境配置
+
+```toml
+application_url = "https://crm.fridayparts.com"  # 固定生产域名
+[build]
+  automatically_update_urls_on_dev = false  # 不自动更新 URL
+```
+
+**特点**：
+- 使用固定的生产域名
+- 不会自动更新 Partners Dashboard 配置
+- 适合连接到已部署的生产服务进行调试
+
+### 使用场景
+
+**场景 1：本地开发新功能**
+```bash
+npm run dev
+# 等价于: shopify app dev --config dev
+```
+CLI 会自动生成临时 Tunnel URL（如 `https://random-xyz.trycloudflare.com`），并启动本地 `index.js` 服务。
+
+**场景 2：调试生产环境**
+```bash
+npm start
+# 等价于: shopify app dev
+```
+CLI 使用生产域名 `https://crm.fridayparts.com`，适合测试已部署的服务或排查生产环境问题。
+
+### 配置文件命名规则
+
+Shopify CLI 支持通过 `--config` 参数指定配置文件：
+
+```
+shopify.app.toml          # 默认配置（npm start）
+shopify.app.dev.toml      # dev 配置（npm run dev）
+shopify.app.staging.toml  # 可自定义其他环境
+```
+
+> **参考**: [Manage App Config Files](https://shopify.dev/docs/apps/build/cli-for-apps/manage-app-config-files)
 
 ---
 

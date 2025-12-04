@@ -4,9 +4,8 @@
   "main": "index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "shopify": "shopify",
-    "build": "shopify app build",
-    "dev": "shopify app dev",
+    "dev": "shopify app dev --config dev",
+    "start": "shopify app dev",
     "info": "shopify app info",
     "generate": "shopify app generate",
     "deploy": "shopify app deploy"

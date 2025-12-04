@@ -13,7 +13,7 @@ name = "crm"
 
 # [必需] 应用的入口 URL。当商家点击应用时，他们将被重定向到此地址。
 # 对于开发，这通常是您的开发服务器/隧道 URL。
-application_url = "https://crm.fridayparts.com"
+application_url = "https://example.trycloudflare.com"
 
 # [可选] 应用是否应嵌入 Shopify 后台。
 # true: 应用将作为 iframe 在 Shopify 后台内加载。
@@ -41,7 +41,7 @@ embedded = false
   # [必需] OAuth 回调 URL。用户授权后，Shopify 会将他们重定向到这些 URL 之一。
   # 必须与合作伙伴仪表板中设置的 URL 严格匹配。
   redirect_urls = [
-    "https://crm.fridayparts.com/auth/callback"
+    "https://example.trycloudflare.com/auth/callback"
   ]
 
 # ---------------------------------------------------------------------------
@@ -113,7 +113,7 @@ embedded = false
   # [可选] 在 `dev` 期间是否自动更新合作伙伴仪表板中的应用 URL。
   # true: `shopify app dev` 启动时会自动更新 application_url 和 redirect_urls。
   # false: 您需要手动管理这些 URL。
-  automatically_update_urls_on_dev = false
+  automatically_update_urls_on_dev = true
   # [可选] 用于 `dev` 和预览的开发商店的 URL。
   # 例如: "my-dev-store.myshopify.com"
   dev_store_url = "local-1000163.myshopify.com"
