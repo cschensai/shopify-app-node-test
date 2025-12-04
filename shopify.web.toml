@@ -1,0 +1,8 @@
+# CLI 代理层在 roles = ["backend"] 时只允许 /extensions 路径。(https://github.com/Shopify/cli/issues/6364)
+roles = ["frontend"]
+
+[commands]
+dev = "node index.js"
+build = ""
+
+port = 3333

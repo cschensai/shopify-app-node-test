@@ -1,58 +1,147 @@
-# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+# Shopify App 配置文件 (shopify.app.toml)
+# 本文件用于定义您的 Shopify 应用的核心设置。
+# 完整文档请参考: https://shopify.dev/docs/apps/tools/cli/configuration
 
+# ---------------------------------------------------------------------------
+# 1. 全局应用设置 (App Info)
+# ---------------------------------------------------------------------------
+# [必需] 应用的唯一客户端 ID，在合作伙伴仪表板中创建应用时生成。
 client_id = "7fe4e163984b20ac4242239b83f18854"
+
+# [必需] 应用的名称，将显示在 Shopify 后台和应用商店中。
 name = "crm"
+
+# [必需] 应用的入口 URL。当商家点击应用时，他们将被重定向到此地址。
+# 对于开发，这通常是您的开发服务器/隧道 URL。
 application_url = "https://valentine-hoped-comes-reality.trycloudflare.com"
+
+# [可选] 应用是否应嵌入 Shopify 后台。
+# true: 应用将作为 iframe 在 Shopify 后台内加载。
+# false: 应用将在新标签页中打开（非嵌入式应用）。
 embedded = false
+
+# [可选] 指定 Shopify CLI 应该在哪里查找您的应用扩展。
+# extension_directories = [ "extensions/*" ]
+
+# [可选] 指定 Shopify CLI 应该在哪里查找您的 Web 前端文件。
+# web_directories = [ "frontend" ]
+
+# ---------------------------------------------------------------------------
+# 2. 访问和认证 (Access & Authentication)
+# ---------------------------------------------------------------------------
+# [access] 表用于配置对 Shopify API 的访问权限，特别是针对嵌入式应用。
+[access]
+  # [可选] direct_api_mode 控制应用在离线和在线访问模式下的 API 访问。
+  # 'offline': (默认) 应用请求离线访问 token，适用于需要后台作业和长期访问的场景。
+  # 'online': 应用请求在线访问 token，与用户会话绑定，适用于生命周期较短的请求。
+  direct_api_mode = "offline"
+
+# [auth] 表用于配置 OAuth 2.0 认证流程。
 [auth]
-redirect_urls = [
-  "https://valentine-hoped-comes-reality.trycloudflare.com/auth/callback"
-]
+  # [必需] OAuth 回调 URL。用户授权后，Shopify 会将他们重定向到这些 URL 之一。
+  # 必须与合作伙伴仪表板中设置的 URL 严格匹配。
+  redirect_urls = [
+    "https://valentine-hoped-comes-reality.trycloudflare.com/auth/callback"
+  ]
 
-[build]
-automatically_update_urls_on_dev = true
-dev_store_url = ""
-
+# ---------------------------------------------------------------------------
+# 3. 访问范围 (Access Scopes)
+# ---------------------------------------------------------------------------
+# 定义您的应用需要从 Shopify API 请求的权限。
+# 更多信息: https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 [access_scopes]
-# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "customer_read_customers,customer_read_draft_orders,customer_read_orders,customer_read_quick_sale,customer_write_customers,customer_write_orders,customer_write_quick_sale,read_all_cart_transforms,read_assigned_fulfillment_orders,read_audit_events,read_cart_transforms,read_cash_tracking,read_checkouts,read_content,read_custom_fulfillment_services,read_customer_data_erasure,read_customer_events,read_customer_merge,read_customers,read_delivery_customizations,read_discounts,read_discounts_allocator_functions,read_draft_orders,read_fulfillment_constraint_rules,read_fulfillments,read_inventory_shipments,read_inventory_shipments_received_items,read_inventory_transfers,read_locales,read_locations,read_markets,read_merchant_managed_fulfillment_orders,read_metaobject_definitions,read_metaobjects,read_online_store_navigation,read_online_store_pages,read_order_edits,read_orders,read_price_rules,read_products,read_purchase_options,read_returns,read_shipping,read_store_credit_account_transactions,read_store_credit_accounts,read_third_party_fulfillment_orders,unauthenticated_read_bulk_operations,unauthenticated_read_bundles,unauthenticated_read_checkouts,unauthenticated_read_customer_tags,unauthenticated_read_customers,unauthenticated_read_metaobjects,unauthenticated_write_bulk_operations,unauthenticated_write_checkouts,unauthenticated_write_customers,write_assigned_fulfillment_orders,write_cart_transforms,write_content,write_custom_fulfillment_services,write_customer_data_erasure,write_customer_merge,write_customers,write_delivery_customizations,write_discounts,write_discounts_allocator_functions,write_draft_orders,write_fulfillment_constraint_rules,write_fulfillments,write_inventory_shipments,write_inventory_shipments_received_items,write_inventory_transfers,write_locales,write_locations,write_markets,write_markets_home,write_merchant_managed_fulfillment_orders,write_metaobject_definitions,write_metaobjects,write_online_store_navigation,write_online_store_pages,write_order_edits,write_orders,write_price_rules,write_products,write_purchase_options,write_returns,write_shipping,write_store_credit_account_transactions,write_third_party_fulfillment_orders"
-optional_scopes = [ ]
-use_legacy_install_flow = false
+  # [必需] 应用安装时请求的权限范围。
+  # 最佳实践是仅请求应用核心功能所必需的最小权限范围。
+  scopes = "customer_read_customers,customer_read_draft_orders,customer_read_orders,customer_read_quick_sale,customer_write_customers,customer_write_orders,customer_write_quick_sale,read_all_cart_transforms,read_assigned_fulfillment_orders,read_audit_events,read_cart_transforms,read_cash_tracking,read_checkouts,read_content,read_custom_fulfillment_services,read_customer_data_erasure,read_customer_events,read_customer_merge,read_customers,read_delivery_customizations,read_discounts,read_discounts_allocator_functions,read_draft_orders,read_fulfillment_constraint_rules,read_fulfillments,read_inventory_shipments,read_inventory_shipments_received_items,read_inventory_transfers,read_locales,read_locations,read_markets,read_merchant_managed_fulfillment_orders,read_metaobject_definitions,read_metaobjects,read_online_store_navigation,read_online_store_pages,read_order_edits,read_orders,read_price_rules,read_products,read_purchase_options,read_returns,read_shipping,read_store_credit_account_transactions,read_store_credit_accounts,read_third_party_fulfillment_orders,unauthenticated_read_bulk_operations,unauthenticated_read_bundles,unauthenticated_read_checkouts,unauthenticated_read_customer_tags,unauthenticated_read_customers,unauthenticated_read_metaobjects,unauthenticated_write_bulk_operations,unauthenticated_write_checkouts,unauthenticated_write_customers,write_assigned_fulfillment_orders,write_cart_transforms,write_content,write_custom_fulfillment_services,write_customer_data_erasure,write_customer_merge,write_customers,write_delivery_customizations,write_discounts,write_discounts_allocator_functions,write_draft_orders,write_fulfillment_constraint_rules,write_fulfillments,write_inventory_shipments,write_inventory_shipments_received_items,write_inventory_transfers,write_locales,write_locations,write_markets,write_markets_home,write_merchant_managed_fulfillment_orders,write_metaobject_definitions,write_metaobjects,write_online_store_navigation,write_online_store_pages,write_order_edits,write_orders,write_price_rules,write_products,write_purchase_options,write_returns,write_shipping,write_store_credit_account_transactions,write_third_party_fulfillment_orders"
+
+  # [可选] 应用安装后可以动态请求的权限。
+  optional_scopes = [ ]
+
+  # [可选] 是否使用旧版的安装流程。除非有特殊需要，否则建议保持为 false。
+  use_legacy_install_flow = false
 
 
+# ---------------------------------------------------------------------------
+# 4. Webhook 订阅 (Webhook Subscriptions)
+# ---------------------------------------------------------------------------
 [webhooks]
-api_version = "2025-10"
-# 核心资源变更监控
-[[webhooks.subscriptions]]
-topics = [
-  "app/uninstalled",
-  "shop/update",
-  "domains/create", "domains/update", "domains/destroy",
-  "products/create", "products/update", "products/delete",
-  "collections/create", "collections/update", "collections/delete",
-  "inventory_items/create", "inventory_items/update", "inventory_items/delete",
-  "locations/create", "locations/update", "locations/delete"
-]
-uri = "/api/webhooks"
+  # [必需] 用于序列化 Webhook 负载的 Shopify API 版本。
+  api_version = "2025-10"
 
-# 订单与交易流程全链路监控
-[[webhooks.subscriptions]]
-topics = [
-  "orders/create", "orders/updated", "orders/cancelled", "orders/fulfilled", "orders/paid",
-  "orders/partially_fulfilled", "orders/delete", "orders/edited",
-  "draft_orders/create", "draft_orders/update", "draft_orders/delete",
-  "checkouts/create", "checkouts/update", "checkouts/delete",
-  
-  "refunds/create",
-  "tender_transactions/create"
-]
-uri = "/api/webhooks"
+  # [可选] Webhook 订阅列表。您可以定义多个订阅块。
+  # 核心资源变更监控
+  [[webhooks.subscriptions]]
+    # [必需] 您要订阅的 Webhook 主题列表。
+    topics = [
+      "app/uninstalled",
+      "shop/update",
+      "domains/create", "domains/update", "domains/destroy",
+      "products/create", "products/update", "products/delete",
+      "collections/create", "collections/update", "collections/delete",
+      "inventory_items/create", "inventory_items/update", "inventory_items/delete",
+      "locations/create", "locations/update", "locations/delete"
+    ]
+    # [必需] 接收 Webhook 通知的端点 URI。
+    uri = "/api/webhooks"
 
-[[webhooks.subscriptions]]
-# 强制合规主题必须使用 compliance_topics 字段
-compliance_topics = [
-  "customers/redact",
-  "shop/redact",
-  "customers/data_request"
-]
-uri = "/api/webhooks" # 建议为合规性 Webhook 使用一个专用端点
+  # 订单与交易流程全链路监控
+  [[webhooks.subscriptions]]
+    topics = [
+      "orders/create", "orders/updated", "orders/cancelled", "orders/fulfilled", "orders/paid",
+      "orders/partially_fulfilled", "orders/delete", "orders/edited",
+      "draft_orders/create", "draft_orders/update", "draft_orders/delete",
+      "checkouts/create", "checkouts/update", "checkouts/delete",
+      "refunds/create",
+      "tender_transactions/create"
+    ]
+    uri = "/api/webhooks"
+
+  # [可选] 专门用于处理 GDPR 数据请求的 Webhook。
+  [[webhooks.subscriptions]]
+    # [必需] 强制合规主题必须使用 `compliance_topics` 字段，而不是 `topics`。
+    compliance_topics = [
+      "customers/redact",       # 客户数据擦除请求
+      "shop/redact",            # 商店数据擦除请求
+      "customers/data_request"  # 客户数据访问请求
+    ]
+    uri = "/api/webhooks" # 建议为合规性 Webhook 使用一个专用的、经过验证的端点。
+
+# ---------------------------------------------------------------------------
+# 5. 构建和开发设置 (Build & Development)
+# ---------------------------------------------------------------------------
+[build]
+  # [可选] 在 `dev` 期间是否自动更新合作伙伴仪表板中的应用 URL。
+  # true: `shopify app dev` 启动时会自动更新 application_url 和 redirect_urls。
+  # false: 您需要手动管理这些 URL。
+  automatically_update_urls_on_dev = true
+  dev_script = "node index.js"
+  port = 3333
+
+  # [可选] 用于 `dev` 和预览的开发商店的 URL。
+  # 例如: "my-dev-store.myshopify.com"
+  dev_store_url = "local-1000163.myshopify.com"
+
+
+# ---------------------------------------------------------------------------
+# 6. 其他可选配置
+# ---------------------------------------------------------------------------
+# [可选] 应用代理 (App Proxy)
+# 允许您从 Shopify 商店的前端安全地请求数据。
+# [app_proxy]
+  # [必需] 应用代理服务器的 URL。
+  # url = "https://my-app-proxy.example.com/proxy"
+  # [必需] 商店 URL 中的子路径。
+  # subpath = "my-app"
+  # [可选] 应用代理 URL 的前缀。默认为 "apps"。
+  # prefix = "a"
+
+# [可选] POS (Point of Sale) 设置
+# [pos]
+  # [可选] 是否在 Shopify POS 中加载嵌入式应用或 POS UI 扩展。
+  # embedded = false
+
+# [可选] 应用偏好设置 (App Preferences)
+# 如果您的应用需要在 Shopify 后台的“设置”区域有一个偏好设置页面。
+# [app_preferences]
+  # [必需] 偏好设置页面的 URL。
+  # url = "https://my-app.example.com/preferences"

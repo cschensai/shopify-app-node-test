@@ -25,6 +25,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Shopify 非嵌入式应用 (Non-Embedded App) - 单文件 Express 服务端实现，包含手动 OAuth 授权流程、Webhook 验签与监听。
 
+- Shopify CLI Version: 3.88.0
+- Node Version: v22.16.0
+
 ## Commands
 
 ```bash

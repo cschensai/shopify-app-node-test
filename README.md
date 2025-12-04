@@ -1,6 +1,6 @@
 ### Shopify 本地订阅 Webhook
 
-- Dev 店铺 webhook 签名：55daf1b48e3d67a1f0285e7ce7a929943ad24e8830e728046ba80d9d1afe8dc4
+- Dev 店铺链接：local-1000163.myshopify.com
 
 **Shopify 不允许 webhook 直接发送到 localhost**。不过有几种解决方案:
 
@@ -34,17 +34,12 @@
     
 3. **异步处理**
     - 收到 webhook 后立即返回 200，然后异步处理数据
-#### 安装 Cloud Flare
+#### 安装 Cloudflare
 
 ```bash
-wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-sudo dpkg -i cloudflared-linux-amd64.deb
-$ cloudflared --version
-cloudflared version 2025.11.1 (built 2025-11-07-16:59 UTC)
-
-# 启动一个临时隧道指向本地 3333 服务器
-# https://monster-blue-hip-intranet.trycloudflare.com
-$ cloudflared tunnel --url http://localhost:3333
+rm /home/linnzh/.nvm/versions/node/v22.16.0/lib/node_modules/@shopify/cli/bin/cloudflared
+wget -O /home/linnzh/.nvm/versions/node/v22.16.0/lib/node_modules/@shopify/cli/bin/cloudflared https://github.com/cloudflare/cloudflared/releases/download/2024.8.2/cloudflared-linux-amd64
+chmod u+x /home/linnzh/.nvm/versions/node/v22.16.0/lib/node_modules/@shopify/cli/bin/cloudflared
 ```
 
 #### 本地启动

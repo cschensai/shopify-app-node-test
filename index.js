@@ -15,10 +15,11 @@ require('@shopify/shopify-api/adapters/node');
 // 1. 配置与初始化
 // =============================================================================
 
-const PORT = 3333; // 明确要求的端口
+// CLI 为 frontend 角色分配动态端口，应用必须监听该端口而非硬编码值
+const PORT = process.env.PORT || process.env.FRONTEND_PORT || 3333;
 
-// 从环境变量获取配置。在 CLI dev 模式下，SHOPIFY_APP_URL 由 CLI 自动注入
-const HOST = process.env.SHOPIFY_APP_URL || `http://localhost:${PORT}`;
+// 从环境变量获取配置。在 CLI dev HOST 由 CLI 自动注入
+const HOST = process.env.HOST || process.env.SHOPIFY_APP_URL || `http://localhost:${PORT}`;
 const API_KEY = process.env.SHOPIFY_API_KEY;
 const API_SECRET = process.env.SHOPIFY_API_SECRET;
 // 获取我们在 TOML 中配置的 Extensive Scopes
