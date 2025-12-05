@@ -3,7 +3,15 @@
  * 功能：端口 3333, 手动 OAuth 流程, 全量 Webhook 监听与验签, 结构化日志
  */
 
-require('dotenv').config();
+
+// cs-log 这里的config({ override: true }) 表示如果环境变量已经存在，则覆盖它
+require('dotenv').config({
+  override: true,
+  path: `.env.${process.env.APP_ENV}`,
+});
+
+console.log('cs-test-dev', process.env.APP_ENV, process.env.CS_TEST);
+
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
@@ -14,7 +22,6 @@ require('@shopify/shopify-api/adapters/node');
 // =============================================================================
 // 1. 配置与初始化
 // =============================================================================
-
 // CLI 为 frontend 角色分配动态端口，应用必须监听该端口而非硬编码值
 const PORT = process.env.PORT || process.env.FRONTEND_PORT || 3333;
 
@@ -23,9 +30,9 @@ const HOST = process.env.HOST || process.env.SHOPIFY_APP_URL || `http://localhos
 const API_KEY = process.env.SHOPIFY_API_KEY;
 const API_SECRET = process.env.SHOPIFY_API_SECRET;
 // 获取我们在 TOML 中配置的 Extensive Scopes
-const SCOPES = process.env.SCOPES? process.env.SCOPES.split(',') : ['read_products'];
+const SCOPES = process.env.SCOPES ? process.env.SCOPES.split(',') : ['read_products'];
 
-if (!API_KEY ||!API_SECRET) {
+if (!API_KEY || !API_SECRET) {
   console.error('❌ 错误: 缺少 SHOPIFY_API_KEY 或 SHOPIFY_API_SECRET 环境变量。');
   console.error('   请确保通过 "shopify app dev" 启动，或手动配置.env 文件。');
   process.exit(1);
@@ -81,7 +88,7 @@ app.use((req, res, next) => {
  */
 app.get('/auth', async (req, res) => {
   const shop = req.query.shop;
-  
+
   if (!shop) {
     return res.status(400).send('❌ 缺少 "shop" 参数。请通过 Shopify 后台安装应用。');
   }
@@ -123,11 +130,11 @@ app.get('/auth/callback', async (req, res) => {
     });
 
     const { session } = callbackResponse;
-    
+
     // 2. 此时已成功获取 Access Token
     console.log(`✅ OAuth 成功! 店铺: ${session.shop}`);
     console.log(`🔑 Access Token (Offline): ${session.accessToken}`);
-    
+
     // 3. (重要) 在此处将 Session 存储到数据库 (Redis/MySQL)
     // 示例代码省略数据库操作，但在生产环境中这是必须的。
     // await db.storeSession(session);
@@ -137,7 +144,7 @@ app.get('/auth/callback', async (req, res) => {
 
   } catch (error) {
     console.error(`❌ OAuth 回调处理失败: ${error.message}`);
-    
+
     // 常见错误处理：Cookie 丢失或签名不匹配
     if (error.message.includes('CookieNotFound')) {
       res.status(403).send('Session Cookie 丢失，请重新发起授权。');
@@ -164,7 +171,7 @@ app.post('/api/webhooks', async (req, res) => {
     const webhookId = req.get('X-Shopify-Webhook-Id');
 
     // 1. 基础校验
-    if (!hmacHeader ||!req.rawBody) {
+    if (!hmacHeader || !req.rawBody) {
       console.warn('⚠️ 收到无签名或无 Body 的请求，拒绝访问。');
       return res.status(401).send('Unauthorized');
     }
@@ -172,16 +179,16 @@ app.post('/api/webhooks', async (req, res) => {
     // 2. HMAC 签名验证 (核心安全逻辑)
     // 使用 API Secret 计算 Body 的 Hash，并与 Header 进行比对
     const generatedHash = crypto
-     .createHmac('sha256', API_SECRET)
-     .update(req.rawBody)
-     .digest('base64');
+      .createHmac('sha256', API_SECRET)
+      .update(req.rawBody)
+      .digest('base64');
 
     // 使用 timingSafeEqual 防止时序攻击
     const hashBuffer = Buffer.from(generatedHash, 'utf-8');
     const headerBuffer = Buffer.from(hmacHeader, 'utf-8');
 
     // 长度检查防止 Buffer 构造错误
-    if (hashBuffer.length!== headerBuffer.length || !crypto.timingSafeEqual(hashBuffer, headerBuffer)) {
+    if (hashBuffer.length !== headerBuffer.length || !crypto.timingSafeEqual(hashBuffer, headerBuffer)) {
       console.error(`⛔ HMAC 验签失败! Topic: ${topic} | Shop: ${shop}`);
       return res.status(401).send('HMAC Validation Failed');
     }
@@ -196,7 +203,7 @@ app.post('/api/webhooks', async (req, res) => {
       'X-Shopify-Hmac-Sha256': hmacHeader.substring(0, 20) + '...'
     }, null, 2));
     console.log(`📦 Payload:`, JSON.stringify(req.body, null, 2));
-    
+
     // (可选) 在此处进行 Webhook幂等性检查 (基于 Webhook ID 防止重复处理)
 
     // 4. 立即返回 200 OK
