@@ -9,7 +9,6 @@ require('dotenv').config({
   override: true,
   path: path.join(__dirname, `env/.env.${currAppEnv}`),
 });
-console.log(111, process.env.CS_TEST);
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');

@@ -4,10 +4,10 @@
   "main": "index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "APP_ENV=dev shopify app dev --config dev",
-    "test": "APP_ENV=test shopify app dev --config dev",
-    "dev:debug": "APP_ENV=prod node index.js",
-    "start": "cross-env shopify app dev",
+    "dev": "cross-env APP_ENV=dev shopify app dev --config dev",
+    "test": "cross-env APP_ENV=test shopify app dev --config dev",
+    "dev:debug": "cross-env APP_ENV=dev node index.js",
+    "start": "shopify app dev",
     "info": "shopify app info",
     "generate": "shopify app generate",
     "deploy": "shopify app deploy"
@@ -21,5 +21,7 @@
   },
   "author": "linnzh",
   "private": true,
-  "devDependencies": {}
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
 }
