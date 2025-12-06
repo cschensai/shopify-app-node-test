@@ -2,16 +2,14 @@
  * server.js - Shopify 非嵌入式应用单文件服务端实现
  * 功能：端口 3333, 手动 OAuth 流程, 全量 Webhook 监听与验签, 结构化日志
  */
-
-
 // cs-log 这里的config({ override: true }) 表示如果环境变量已经存在，则覆盖它
+const path = require('path');
+const currAppEnv = process.env.APP_ENV || 'dev';
 require('dotenv').config({
   override: true,
-  path: `.env.${process.env.APP_ENV}`,
+  path: path.join(__dirname, `env/.env.${currAppEnv}`),
 });
-
-console.log('cs-test-dev', process.env.APP_ENV, process.env.CS_TEST);
-
+console.log(111, process.env.CS_TEST);
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
@@ -53,6 +51,14 @@ const shopify = shopifyApi({
 });
 
 const app = express();
+
+// cs-log ejs模板
+// 设置模板引擎为 EJS
+app.set('view engine', 'ejs');
+// 设置views模板目录
+app.set('views', './views');
+// 静态文件目录
+app.use(express.static('public'));
 
 // =============================================================================
 // 2. 中间件配置
@@ -279,7 +285,6 @@ app.get('/', async (req, res) => {
     console.log(`🔍 检测到店铺访问: ${cleanShop}，重定向到授权流程...`);
     return res.redirect(`/auth?shop=${cleanShop}`);
   }
-
   res.send(`
     <html>
       <head>
@@ -309,6 +314,47 @@ app.get('/', async (req, res) => {
       </body>
     </html>
   `);
+});
+
+// cs-log ejs模板
+app.get('/test', (req, res) => {
+  const shop = req.query.shop;
+  const installed = req.query.installed;
+
+  if (shop && !installed) {
+    const cleanShop = shopify.utils.sanitizeShop(shop);
+
+    if (!cleanShop) {
+      return res.status(400).send('Invalid shop parameter');
+    }
+
+    const hmac = req.query.hmac;
+    if (hmac) {
+      const params = { ...req.query };
+      delete params.hmac;
+      const queryString = Object.keys(params)
+        .map(key => `${key}=${params[key]}`)
+        .sort()
+        .join('&');
+      const hash = crypto
+        .createHmac('sha256', API_SECRET)
+        .update(queryString)
+        .digest('hex');
+
+      if (hash !== hmac) {
+        return res.status(401).send('HMAC validation failed');
+      }
+    }
+
+    console.log(`🔍 检测到店铺访问: ${cleanShop}，重定向到授权流程...`);
+    return res.redirect(`/auth?shop=${cleanShop}`);
+  }
+  res.render('index', {
+    shop,
+    installed,
+    PORT,
+    HOST,
+  });
 });
 
 // =============================================================================

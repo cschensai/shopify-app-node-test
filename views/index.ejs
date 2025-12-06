@@ -1,0 +1,27 @@
+<html>
+      <head>
+        <title>Non-Embedded App</title>
+        <style>
+          body { font-family: sans-serif; padding: 50px; text-align: center; }
+         .status { padding: 20px; background: #f4f6f8; border-radius: 8px; display: inline-block; }
+         .success { padding: 20px; background: #d4edda; border-radius: 8px; display: inline-block; color: #155724; }
+        </style>
+      </head>
+      <body>
+        <h1>🚀 非嵌入式应用运行中</h1>
+        <% if (shop && installed) { %>
+          <div class="success">
+            <h2>✅ 授权成功！</h2>
+            <p>当前连接店铺: <strong><%= shop %></strong></p>
+            <p>应用已成功安装并获取 Access Token</p>
+          </div>
+        <% } else { %>
+          <div class="status">
+            <p>监听端口: <strong><%= PORT %></strong></p>
+            <p>Tunnel URL: <strong><%= HOST %></strong></p>
+          </div>
+          <br/><br/>
+          <p><a href="/auth?shop=YOUR_TEST_STORE.myshopify.com">👉 点击此处手动发起测试授权</a></p>
+        <% } %>
+      </body>
+    </html>

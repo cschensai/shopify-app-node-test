@@ -4,8 +4,9 @@
   "main": "index.js",
   "license": "UNLICENSED",
   "scripts": {
-    "dev": "cross-env APP_ENV=dev shopify app dev --config dev",
-    "test": "cross-env APP_ENV=test shopify app dev --config dev",
+    "dev": "APP_ENV=dev shopify app dev --config dev",
+    "test": "APP_ENV=test shopify app dev --config dev",
+    "dev:debug": "APP_ENV=prod node index.js",
     "start": "cross-env shopify app dev",
     "info": "shopify app info",
     "generate": "shopify app generate",
@@ -15,12 +16,10 @@
     "@shopify/shopify-api": "^12.1.2",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
     "express": "^5.2.1"
   },
   "author": "linnzh",
   "private": true,
-  "packageManager": "pnpm@10.23.0+sha512.21c4e5698002ade97e4efe8b8b4a89a8de3c85a37919f957e7a0f30f38fbc5bbdd05980ffe29179b2fb6e6e691242e098d945d1601772cad0fef5fb6411e2a4b",
-  "devDependencies": {
-    "cross-env": "^10.1.0"
-  }
+  "devDependencies": {}
 }
